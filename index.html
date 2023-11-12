@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <title>Adri's Investment Calculator</title>
+</head>
+
+<style>
+    body {
+    animation: fadeInAnimation ease 1.25s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+ 
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+     }
+}
+</style>
+
+<body>
+    <div class="container">
+        <!-- Large Screen Sizes -->
+        <div class="d-none d-md-block mt-4 p-5 rounded-3" style="background-color: #f1f7dc;">
+            <h2>Adri's Investment Calculator</h2>
+            <hr>
+            <p>Plug in the values to get a rough idea of how your investments could grow over time. This will demonstrate the power of compounding, the benefits of starting early & your time in the market.</p>
+        </div>
+        <!-- Small Screen Sizes -->
+        <div class="d-md-none mt-3 p-4 rounded-3" style="background-color: #f1f7dc;">
+            <h2>Adri's Investment Calculator</h2>
+            <hr>
+            <p>Plug in the values to get a rough idea of how your investments could grow over time. This will demonstrate the power of compounding, the benefits of starting early & your time in the market.</p>
+        </div>
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs nav-justified mt-3" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#home">Calculate</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#menu1">Breakdown</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#menu2">Formula</a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content mb-4">
+            <div id="home" class="container tab-pane fade show active"><br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mt-2">
+                            <div class="row mt-3 mx-1 pb-2 border-bottom">
+                                <div class="col-md-4">
+                                    <label for="initial"><strong>Initial Investment:</strong></label>
+                                </div>
+                                <div class="col-md-6 col-sm-8 col-xs-6">
+                                    <input class="form-control p-2" type="number" id="initial" name="initial" placeholder="$">
+                                </div>
+                            </div>
+                
+                            <div class="row mt-3 mx-1 pb-2 border-bottom">
+                                <div class="col-md-4">
+                                    <label for="contributions"><strong>Additional Contributions:</strong></label>
+                                </div>
+                                <div class="col-md-6 col-sm-8">
+                                    <input class="form-control p-2" type="number" id="contributions" name="contributions" placeholder="$">
+                                </div>
+                            </div>
+                
+                            <div class="row mt-3 mx-1 pb-2 border-bottom">
+                                <div class="col-md-4">
+                                    <label for="contributions"><strong>Contribution Frequency:</strong></label>
+                                </div>
+                                <div class="col-md-6 col-sm-8 d-flex">
+                                    <div class="form-check">
+                                        <input type="radio" class="form-check-input" id="monthly" name="optradio" value="12" checked>
+                                        <label class="form-check-label" for="monthly"><strong>Monthly</strong></label>
+                                      </div>
+                                      <div class="form-check ms-4">
+                                        <input type="radio" class="form-check-input" id="annually" name="optradio" value="1">
+                                        <label class="form-check-label" for="annually"><strong>Annually</strong></label>
+                                      </div>
+                                </div>
+                            </div>
+                
+                            <div class="row mt-3 mx-1 pb-2 border-bottom">
+                                <div class="col-md-4">
+                                    <label for="time"><strong>Years to Grow</strong></label>
+                                </div>
+                                <div class="col-md-6 col-sm-8">
+                                    <input class="form-control p-2" type="number" id="time" name="time">
+                                </div>
+                            </div>
+                
+                            <div class="row mt-3 mx-1 pb-2 border-bottom">
+                                <div class="col-md-4">
+                                    <label for="return"><strong>Expected Rate of Return</strong></label>
+                                </div>
+                                <div class="col-md-6 col-sm-8">
+                                    <input class="form-control p-2" type="number" id="return" name="return" placeholder="%">
+                                </div>
+                            </div>
+        
+                            <div class="row mt-3 mx-1 pb-2 border-bottom">
+                                <div class="col-md-4">
+                                    <label for="goal"><strong>Goal End Balance</strong></label>
+                                </div>
+                                <div class="col-md-6 col-sm-8">
+                                    <input class="form-control p-2" type="number" id="goal" name="goal" placeholder="$">
+                                </div>
+                            </div>
+                
+                            <div class="mt-3 mx-1 pb-3 d-flex">
+                                <button type="button" class="btn btn-lg btn-primary ms-2" onclick="calculate()">Calculate</button>
+                                <button type="button" class="btn btn-lg btn-secondary ms-4" onclick="clearForm()">Clear</button>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="col-lg-6">
+                        <div class="mt-2">
+                            <h5 id="final"></h5>
+                            <h6 class="text-center" id="goal_result" style="display:none"></h6><hr id="goal_hr" style="display:none">
+                            <span id="initial_amount"></span><br>
+                            <span id="total_con"></span><br>
+                            <span id="interest_earned"></span>
+                        </div>
+
+                        <!-- Graph Nav tabs -->
+                        <ul class="nav nav-tabs nav-justified mt-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="bar" data-bs-toggle="tab" href="#" onclick="bar()">Bar Graph</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pie" data-bs-toggle="tab" href="#" onclick="pie()">Pie Chart</a>
+                            </li>
+                        </ul>
+                        
+                        <!-- Graphs Canvas -->
+                        <div class="pt-5 chart-container" style="position: relative; height:40vh; width:100%;">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="menu1" class="container tab-pane fade"><br>
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th>Year</th>
+                            <th>Total Contribution</th>
+                            <th>Interest Earned</th>
+                            <th>End Balance</th>
+                          </tr>
+                        </thead>
+                        <tbody id="t-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="menu2" class="container tab-pane fade"><br>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h5>Compount Interest Formula (With Contributions):</h5><hr><br>
+                        <h6><u><strong>FORMULA 1 </strong>(Future Value of Initial Investment):</u></h6>
+                        <h4 class="p-3 border border-success">A1 = P(1 + <sup>r</sup>&frasl;<sub>n</sub>)<sup>nt</sup></h4><br>
+                        <h6><u><strong>FORMULA 2 </strong>(Future Value of Contributions):</u></h6>
+                        <h4 class="p-3 border border-success">A2 = PMT{[(1 + <sup>r</sup>&frasl;<sub>n</sub>)<sup>nt</sup> - 1] / <sup>r</sup>&frasl;<sub>n</sub>}</h4><br>
+                        <h6><u><strong>FINAL FORMULA:</strong></u></h6>
+                        <h4 class="p-3 border border-success">A = A1 + A2</h4><br>
+                        <h6>Where:</h6>
+                        <ul class="list-group">
+                            <li class="list-group-item">A = Future Balance</li>
+                            <li class="list-group-item">P = Principal (Initial Investment)</li>
+                            <li class="list-group-item">r = Interest Rate (as a %)</li>
+                            <li class="list-group-item">t = Number of years</li>
+                            <li class="list-group-item">n = Number of times interest is Compounded per year</li>
+                            <li class="list-group-item">PMT = Contribution Amount</li>
+                        </ul><br>
+                        <p class="p-3 border">NOTE: These formulas assume the contribution frequency is equal to the number of times interest is compounded per year, 
+                            and the contributions are made at the END of each time period.</p><br>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <h5>Example Problem:</h5><hr>
+                        <p>We deposit an initial investment of <u>$10,000</u> and make <u>$500</u> monthly contributions.</p>
+                        <p>If our investment time horizon is <u>10 years</u> and expect a <u>6%</u> rate of return (compounded monthly), what will be the final balance of our investment?</p><br>
+
+                        <ul class="list-group">
+                            <li class="list-group-item">P = $10,000</li>
+                            <li class="list-group-item">r =  6% (0.06)</li>
+                            <li class="list-group-item">t = 10 years</li>
+                            <li class="list-group-item">n = 12 (compounded monthly = 12 times per year)</li>
+                            <li class="list-group-item">PMT = $500</li>
+                        </ul><br>
+
+                        <h5>A = <span>A1</span> + <span>A2</span></h5>
+                        <h5>A = <span>P(1 + <sup>r</sup>&frasl;<sub>n</sub>)<sup>nt</sup></span> + <span>PMT{[(1 + <sup>r</sup>&frasl;<sub>n</sub>)<sup>nt</sup> - 1] / <sup>r</sup>&frasl;<sub>n</sub>}</span></h5><br>
+                        <p>A = <span>(10000 X (1 + <sup>0.06</sup>&frasl;<sub>12</sub>)<sup>(12 X 10)</sup>)</span> + <span>(500 X {[(1 + <sup>0.06</sup>&frasl;<sub>12</sub>)<sup>(12 X 10)</sup> - 1] / <sup>0.06</sup>&frasl;<sub>12</sub>}</span>)</p>
+                        <p>A = <span>(10000 X (1.005)<sup>(12 X 10)</sup>)</span> + <span>(500 X {[(1.005)<sup>(12 X 10)</sup> - 1] / 0.005}</span>)</p>
+                        <p>A = <span>(10000 X (1.005)<sup>120</sup>)</span> + <span>(500 X {[(1.005)<sup>120</sup> - 1] / 0.005}</span>)</p>
+                        <p>A = <span>(18193.97)</span> + <span>(500 X (0.819396734 / 0.005)</span>)</p>
+                        <p>A = <span>(18193.97)</span> + <span>(500 X 163.8793468</span>)</p>
+                        <p>A = <span>18193.97</span> + <span>81939.67</span></p>
+                        <h6>A = <span>100133.64</span></h6><br>
+
+                        <p class="p-3 border">The final balance of our investment will be <strong>$100,133.64.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const config = {
+        type: 'bar',
+        data: {
+            labels: ['1', '2', '3', '4', '5', '6'],
+            datasets: [{
+                label: '$',
+                data: [10, 20, 30, 40, 50, 60],
+                backgroundColor: 'rgb(54, 162, 235)',
+                borderWidth: 1,
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false,
+                }
+            },
+            maintainAspectRatio: false,
+            scales: {
+            y: {
+                beginAtZero: true
+            }
+            }
+        }
+    };
+
+    const chart = new Chart(document.getElementById('myChart'), config);
+
+    window.onload = function () {
+        document.getElementById("initial").value = 10000.00;
+        document.getElementById("return").value = 6.0;
+        document.getElementById("time").value = 10;
+        document.getElementById("contributions").value = 500.00;
+
+        calculate();
+    }
+
+    function calculate() {
+
+        const { format } = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+        });
+
+        let p = document.getElementById("initial").value;
+        let r = document.getElementById("return").value / 100;
+        let n = 1;
+        let t = document.getElementById("time").value;
+        let pmt = document.getElementById("contributions").value;
+        let goal = document.getElementById("goal").value;
+
+        let total_con = 0;
+
+        if (document.getElementById("monthly").checked) {
+            n = document.getElementById("monthly").value;
+            total_con = pmt * 12 * t;
+        } else {
+            n = document.getElementById("annually").value;
+            total_con = pmt * t;
+        }
+
+        // Compound interest calculation
+        let a = ((p * (Math.pow((1 + (r/n)), (n*t)))) + ((pmt * (((Math.pow((1 + (r/n)), (n*t))) - 1) / (r/n))))).toFixed(2);
+
+        if (r == 0) {
+            a = parseFloat(total_con) + parseFloat(p);
+        }
+
+        let interest = a - (parseFloat(total_con) + parseFloat(p));
+
+        document.getElementById("final").innerHTML = "Value of Investment in " + t + " years: <span style=\"color:#017835; font-size:x-large;\"><strong>" + format(a) + "</strong></span><hr>";
+
+        document.getElementById("initial_amount").innerHTML = "Initial Investment: <span style=\"color:#017835;\"><strong>" + format(p) + "</strong></span>";
+        document.getElementById("total_con").innerHTML = "Total Contribution: <span style=\"color:#017835;\"><strong>" + format(total_con) + "</strong></span>";
+        document.getElementById("interest_earned").innerHTML = "Total Interest Earned: <span style=\"color:#017835;\"><strong>" + format(interest) + "</strong></span><br><hr>";
+        
+        // Bar Graph info
+        let aa = 0;
+        let element = document.getElementById("goal_result");
+        let goal_reached = false;
+        let goal_reached_in_i = 0;
+
+        // Clear Table
+        while (document.getElementById("t-body").hasChildNodes()) {
+            document.getElementById("t-body").removeChild(document.getElementById("t-body").firstChild);
+        }
+
+        for (let i = 1; i <= t; i++) {
+            aa = ((p * (Math.pow((1 + (r/n)), (n*i)))) + ((pmt * (((Math.pow((1 + (r/n)), (n*i))) - 1) / (r/n))))).toFixed(2);
+
+            if (!goal_reached && goal != '') {
+                if (parseFloat(aa) >= parseFloat(goal)) {
+                    element.innerHTML = "✓ You will reach your goal in <strong>" + i + " years!</strong>";
+                    element.style.color = "green";
+                    element.classList.remove("border-danger");
+                    element.classList.add("border-success");
+                    element.classList.add("border");
+                    element.classList.add("p-3");
+
+                    $("#goal_result").fadeIn();
+                    $("#goal_hr").fadeIn();
+                    goal_reached_in_i = i;
+                    goal_reached = true;
+                } else {
+                    element.innerHTML = "Unfortunately your goal will not be reached in your investment time horizon. Try adjusting your contributions!";
+                    element.style.color = "red";
+                    element.classList.remove("border-success");
+                    element.classList.add("border-danger");
+                    element.classList.add("border");
+                    element.classList.add("p-3");
+
+                    $("#goal_result").fadeIn();
+                    $("#goal_hr").fadeIn();
+                }
+            } else if (goal == '') {
+                $("#goal_result").fadeOut();
+                $("#goal_hr").fadeOut();
+            }
+
+            const tr = document.createElement("tr");
+
+            var td1 = document.createElement("td");
+            var td2 = document.createElement("td");
+            var td3 = document.createElement("td");
+            var td4 = document.createElement("td");
+
+            var node = document.createTextNode(i);
+            td1.appendChild(node);
+
+            var total_con2 = 0
+            if (document.getElementById("monthly").checked) {
+                n = document.getElementById("monthly").value;
+                total_con2 = pmt * 12 * i;
+            } else {
+                n = document.getElementById("annually").value;
+                total_con2 = pmt * i;
+            }
+
+            node = document.createTextNode(format(total_con2));
+            td2.appendChild(node);
+
+            var interest2 = (((p * (Math.pow((1 + (r/n)), (n*i)))) + ((pmt * (((Math.pow((1 + (r/n)), (n*i))) - 1) / (r/n))))).toFixed(2) - (parseFloat(total_con2) + parseFloat(p))).toFixed(2);
+            node = document.createTextNode(format(interest2));
+            td3.appendChild(node);
+        
+            node = document.createTextNode(format(((p * (Math.pow((1 + (r/n)), (n*i)))) + ((pmt * (((Math.pow((1 + (r/n)), (n*i))) - 1) / (r/n))))).toFixed(2)));
+            td4.appendChild(node);
+
+            if (goal_reached && goal_reached_in_i == i) {
+                td1.style.backgroundColor = "lightgreen";
+                td2.style.backgroundColor = "lightgreen";
+                td3.style.backgroundColor = "lightgreen";
+                td4.style.backgroundColor = "lightgreen";
+            }
+
+            tr.appendChild(td1);
+            tr.appendChild(td2);
+            tr.appendChild(td3);
+            tr.appendChild(td4);
+
+            document.getElementById("t-body").appendChild(tr);
+        }
+        document.getElementById("bar").classList.add("active");
+        document.getElementById("pie").classList.remove("active");
+        bar();
+    }
+
+    function bar() {
+        let p = document.getElementById("initial").value;
+        let r = document.getElementById("return").value / 100;
+        let n = 1;
+        let t = document.getElementById("time").value;
+        let pmt = document.getElementById("contributions").value;
+
+        if (document.getElementById("monthly").checked) {
+            n = document.getElementById("monthly").value;
+        } else {
+            n = document.getElementById("annually").value;
+        }
+
+        // Bar Graph info
+        let time = [];
+        let aa = 0;
+        let balance = [];
+
+        for (let i = 1; i <= t; i++) {
+            time.push("Yr. " + i);
+            aa = ((p * (Math.pow((1 + (r/n)), (n*i)))) + ((pmt * (((Math.pow((1 + (r/n)), (n*i))) - 1) / (r/n))))).toFixed(2);
+            balance.push(aa);
+        }
+
+        chart.config.type = "bar";
+        chart.config.data.labels = time;
+        chart.config.data.datasets[0].data = balance;
+        chart.config.data.datasets[0].backgroundColor = 'rgb(54, 162, 235)';
+
+        chart.update();
+    }
+
+    function pie() {
+        let p = document.getElementById("initial").value;
+        let r = document.getElementById("return").value / 100;
+        let n = 1;
+        let t = document.getElementById("time").value;
+        let pmt = document.getElementById("contributions").value;
+
+        let total_con = 0;
+
+        if (document.getElementById("monthly").checked) {
+            n = document.getElementById("monthly").value;
+            total_con = pmt * 12 * t;
+        } else {
+            n = document.getElementById("annually").value;
+            total_con = pmt * t;
+        }
+
+        // Compound interest calculation
+        let a = ((p * (Math.pow((1 + (r/n)), (n*t)))) + ((pmt * (((Math.pow((1 + (r/n)), (n*t))) - 1) / (r/n))))).toFixed(2);
+
+        if (r == 0) {
+            a = parseFloat(total_con) + parseFloat(p);
+        }
+
+        let interest = a - (parseFloat(total_con) + parseFloat(p));
+
+        chart.config.type = "pie";
+        chart.config.options.scales = {};
+        chart.config.data.labels = ['Initial Investment', 'Total Contribution', 'Total Interest Earned'];
+        chart.config.data.datasets[0].data = [parseFloat(p), parseFloat(total_con), parseFloat(interest)];
+        chart.config.data.datasets[0].backgroundColor = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)', 'rgb(255, 205, 86)'];
+        chart.config.data.datasets[0].hoverOffset = 5;
+
+        chart.update();
+    }
+
+    function clearForm() {
+        document.getElementById("initial").value = null;
+        document.getElementById("return").value = null;
+        document.getElementById("time").value = null;
+        document.getElementById("contributions").value = null;
+        document.getElementById("goal").value = null;
+        document.getElementById("monthly").checked = true;
+        $("#goal_result").fadeOut();
+        $("#goal_hr").fadeOut();
+
+        document.getElementById("bar").classList.add("active");
+        document.getElementById("pie").classList.remove("active");
+        bar();
+    }
+</script>
